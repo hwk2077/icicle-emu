@@ -529,6 +529,20 @@ impl Cpu {
         self.mem.read_bytes(addr, &mut buf[..ptr_size as usize], perm::READ)?;
         Ok(self.arch.bytes_to_pointer(buf))
     }
+
+    pub fn get_current_block(&self, code: &BlockTable) -> Option<(u64, u64)> {
+        match self.block_id != u64::MAX {
+            true => Some((self.block_id, self.block_offset)),
+            false => {
+                let key = BlockKey {
+                    vaddr: self.read_pc(),
+                    isa_mode: self.isa_mode() as u64
+                };
+                let id = code.map.get(&key).map(|group| group.blocks.0)?;
+                Some((id as u64, 0))
+            }
+        }
+    } 
 }
 
 impl ValueSource for Cpu {

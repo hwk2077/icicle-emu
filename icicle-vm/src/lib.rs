@@ -523,14 +523,7 @@ impl Vm {
     /// Return the currently active block and offset. If no block is active, retrieve the next block
     /// based on the current program counter.
     pub fn get_current_block(&self) -> Option<(u64, u64)> {
-        match self.cpu.block_id != u64::MAX {
-            true => Some((self.cpu.block_id, self.cpu.block_offset)),
-            false => {
-                let key = self.get_block_key(self.cpu.read_pc());
-                let id = self.code.map.get(&key).map(|group| group.blocks.0)?;
-                Some((id as u64, 0))
-            }
-        }
+        self.cpu.get_current_block(&self.code)
     }
 
     pub fn reset(&mut self) {
