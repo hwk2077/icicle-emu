@@ -11,6 +11,7 @@ use crate::{
     lifter::{BlockExit, Target},
     regs::{RegValue, Regs, ValueSource},
     trace::Trace,
+    BlockKey, BlockTable,
     ExceptionCode, InstHook, VarSource,
 };
 
